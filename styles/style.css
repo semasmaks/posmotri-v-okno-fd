@@ -81,7 +81,7 @@ ol {
   font-weight: 700;
   font-size: 18px;
   line-height: 100%;
-  letter-spacing: 0;
+  letter-spacing: 0%;
   text-align: center;
   background-color: transparent;
 }
@@ -172,6 +172,7 @@ ol {
   font-family: inherit;
   font-weight: 400;
   font-size: 18px;
+  font-style: Regular;
   line-height: 100%;
   letter-spacing: 0;
 }
@@ -281,3 +282,4 @@ ol {
 }
 
 
+/* ляляля */
