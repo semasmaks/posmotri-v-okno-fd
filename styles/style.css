@@ -53,14 +53,7 @@ ol {
   background-color: #d9d9d9;
 }
 
-:focus {
-  outline: none;
-}
-
-:focus-visible {
-  outline: 2px solid #fff;
-}
-
+/* general-styles */
 .visually-hidden {
   position: absolute;
   width: 1px;
@@ -77,11 +70,11 @@ ol {
   min-height: 34px;
   border: 1px solid currentColor;
   color: #fff;
-  font-family: "Fira Sans Condensed";
+  font-family: "Fira Sans Condensed", sans-serif;
   font-weight: 700;
   font-size: 18px;
   line-height: 100%;
-  letter-spacing: 0%;
+  letter-spacing: 0;
   text-align: center;
   background-color: transparent;
 }
@@ -136,7 +129,7 @@ ol {
   margin-top: 3px;
   margin-bottom: 6px;
   color: #fff;
-  font-family: "Fira Sans Condensed";
+  font-family: "Fira Sans Condensed", sans-serif;
   font-weight: 400;
   font-size: 18px;
   font-style: normal;
@@ -145,7 +138,7 @@ ol {
 }
 
 .search-form__label-text {
-  font-family: "Fira Sans Condensed";
+  font-family: "Fira Sans Condensed", sans-serif;
   font-weight: 400;
   font-size: 18px;
   line-height: 100%;
@@ -167,12 +160,10 @@ ol {
 }
 
 .search-form__textfield::placeholder {
-  padding: 0;
-  color: rgba(255, 255, 255, 0.7);
+  color: #ffffffb2;
   font-family: inherit;
   font-weight: 400;
   font-size: 18px;
-  font-style: Regular;
   line-height: 100%;
   letter-spacing: 0;
 }
@@ -185,6 +176,16 @@ ol {
   vertical-align: middle;
   background-color: transparent;
 }
+
+.search-form__pseudo-checkbox:checked + .search-form__pseudo-checkbox {
+  margin: 2px;
+  height: 15px;
+  width: 15px;
+  background-color: #fff;
+  outline: 1px solid #fff;
+  outline-offset: 1px;
+}
+
 .search-form__checkbox-list {
   display: flex;
   justify-content: space-between;
@@ -209,7 +210,7 @@ ol {
 .title {
   margin: 0;
   padding: 0;
-  font-family: "Oswald";
+  font-family: "Oswald", sans-serif;
   font-weight: 700;
   font-size: 75px;
   line-height: 0.945;
@@ -218,17 +219,18 @@ ol {
 }
 
 .content__accent {
-  color: rgba(84, 80, 80, 1);
+  color: #545050;
 }
 
-/* карточки */
+/* cards-section */
 .content__list-container {
   display: flex;
   flex-direction: column;
-  height: 298px;
+  height: 300px;
   padding-right: 3px;
   padding-left: 2px;
-  overflow: hidden scroll;
+  padding-top: 2px;
+  overflow: hidden auto;
 }
 
 .content__video-card {
@@ -244,9 +246,10 @@ ol {
 
 .content__video-card-title {
   width: 196px;
-  margin-bottom: 6px;
+  margin-bottom: 5px;
+  white-space: nowrap;
   overflow: hidden;
-  font-family: "Oswald";
+  font-family: "Oswald", sans-serif;
   font-weight: 700;
   font-size: 30px;
   line-height: 100%;
@@ -256,7 +259,7 @@ ol {
 }
 
 .content__video-card-description {
-  font-family: "Fira Sans Condensed";
+  font-family: "Fira Sans Condensed", sans-serif;
   font-weight: 400;
   font-size: 18px;
   line-height: 16.2px;
@@ -281,5 +284,32 @@ ol {
   text-decoration: none;
 }
 
+/* states */
+:focus {
+  outline: none;
+}
 
-/* ляляля */
+.button:active,
+.content__video-card:active {
+  background-color: #545050;
+}
+
+.button:hover,
+.content__video-card:hover,
+.search-form__label-text:hover {
+  text-decoration: underline;
+  text-decoration-thickness: 1.25px;
+  text-underline-offset: 1px;
+  cursor: pointer;
+}
+
+.button:focus-visible,
+.search-form__label:has(.search-form__checkbox:focus-visible),
+.search-form__textfield:focus-visible {
+  outline: 1px solid #fff;
+  outline-offset: 1px;
+}
+
+.content__list-item:has(.content__card-link:focus-visible) {
+  outline: 1px solid #fff;
+}
