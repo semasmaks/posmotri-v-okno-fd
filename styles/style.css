@@ -177,7 +177,7 @@ ol {
   background-color: transparent;
 }
 
-.search-form__pseudo-checkbox:checked + .search-form__pseudo-checkbox {
+input[type="checkbox"]:checked + .search-form__pseudo-checkbox {
   margin: 2px;
   height: 15px;
   width: 15px;
@@ -296,7 +296,9 @@ ol {
 
 .button:hover,
 .content__video-card:hover,
-.search-form__label-text:hover {
+.search-form__label-text:hover,
+.search-form__pseudo-checkbox:hover,
+.search-form__pseudo-checkbox:hover + .search-form__label-text {
   text-decoration: underline;
   text-decoration-thickness: 1.25px;
   text-underline-offset: 1px;
