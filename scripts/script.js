@@ -22,6 +22,9 @@ const moreButtonTmp = document.querySelector('.more-button-template');
 // Нужен для работы с переключателями
 let cardsOnPageState = [];
 
+// Флаг для отслеживания, когда нужно блокировать скролл
+let shouldBlockScroll = true;
+
 // Первая загрузка ✅
 
 showPreloader(preloaderTmp, videoContainer);
@@ -42,6 +45,8 @@ form.onsubmit = (e) => {
     el.className === 'error' && el.remove();
   });
 
+  // При поиске блокируем скролл
+  shouldBlockScroll = true;
   showPreloader(preloaderTmp, videoContainer);
   showPreloader(preloaderTmp, cardsContainer);
 
@@ -141,6 +146,13 @@ async function waitForReadyVideo(video) {
 function showPreloader(tmp, parent) {
   const node = tmp.content.cloneNode(true);
   parent.append(node);
+  
+  // Добавляем класс non-scrollable при показе прелоадера в контейнере карточек
+  // Только если shouldBlockScroll = true (при обычной загрузке, а не при "показать ещё")
+  if (parent === cardsContainer && shouldBlockScroll) {
+    cardsContainer.classList.add('non-scrollable');
+  }
+  
   console.log('показал прелоадер');
 }
 
@@ -149,6 +161,12 @@ function removePreloader(parent, preloaderSelector) {
   const preloader = parent.querySelector(preloaderSelector);
   if (preloader) {
     preloader.remove();
+  }
+
+  // Убираем класс non-scrollable при удалении прелоадера из контейнера карточек
+  // Только если shouldBlockScroll = true
+  if (parent === cardsContainer && shouldBlockScroll) {
+    cardsContainer.classList.remove('non-scrollable');
   }
 
   console.log('убрал прелоадер');
@@ -227,7 +245,11 @@ function chooseCurrentVideo({
           item.classList.remove(currentLinkClassName);
         });
         item.classList.add(currentLinkClassName);
+        
+        // При переключении видео блокируем скролл
+        shouldBlockScroll = false;
         showPreloader(preloaderTmp, videoContainer);
+        
         const vidoObj = videoData.find(
           (video) => String(video.id) === String(item.id)
         );
@@ -252,6 +274,11 @@ function showError(container, errorTemplate, errorMessage) {
   node.querySelector('.error__title').textContent = errorMessage;
   container.append(node);
   console.log('показал, ошибку');
+  
+  // Убираем класс non-scrollable при показе ошибки в контейнере карточек
+  if (container === cardsContainer) {
+    cardsContainer.classList.remove('non-scrollable');
+  }
 }
 
 // вывожу больше видео, если в пагинации больше страниц, чем показано
@@ -275,9 +302,23 @@ function showMoreCards({
     // по клику запросим данные для следующей страницы
     let currentPage = dataArray.pagination.page;
     let urlToFetch = `${initialEndpoint}pagination[page]=${(currentPage += 1)}&`;
+    
+    // При загрузке "показать ещё" НЕ блокируем скролл
+    shouldBlockScroll = false;
+    
+    // Создаем специальный прелоадер для кнопки "показать ещё" без блокировки скролла
+    const loadingPreloader = preloaderTmp.content.cloneNode(true);
+    buttonInDOM.replaceWith(loadingPreloader);
+    
     try {
       let data = await (await fetch(urlToFetch)).json();
-      buttonInDOM.remove();
+      
+      // Удаляем прелоадер
+      const preloader = cardsContainer.querySelector('.preloader');
+      if (preloader) {
+        preloader.remove();
+      }
+      
       cardsOnPageState = cardsOnPageState.concat(data.results);
       appendCards({
         baseUrl,
@@ -292,6 +333,10 @@ function showMoreCards({
         currentLinkClassName: 'content__card-link_current',
         mainVideo: videoElement,
       });
+      
+      // Восстанавливаем shouldBlockScroll для будущих загрузок
+      shouldBlockScroll = true;
+      
       showMoreCards({
         dataArray: data,
         buttonTemplate,
@@ -302,6 +347,12 @@ function showMoreCards({
         cardTmp,
       });
     } catch (err) {
+      // В случае ошибки тоже восстанавливаем shouldBlockScroll
+      shouldBlockScroll = true;
+      const preloader = cardsContainer.querySelector('.preloader');
+      if (preloader) {
+        preloader.remove();
+      }
       return err;
     }
   });
