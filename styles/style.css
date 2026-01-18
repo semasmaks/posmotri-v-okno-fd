@@ -278,12 +278,13 @@ input[type="checkbox"]:checked + .search-form__pseudo-checkbox {
   object-fit: cover;
 }
 
-.content__list-item {
+.content__list-item:not(:last-child) {
   margin-bottom: 30px;
 }
 
 .more-button {
   margin-bottom: 2px;
+  margin-top: 30px;
 }
 
 .content__card-link {
@@ -315,12 +316,12 @@ input[type="checkbox"]:checked + .search-form__pseudo-checkbox {
 }
 
 .button:focus-visible,
-.search-form__label:has(.search-form__checkbox:focus-visible),
 .search-form__textfield:focus-visible {
   outline: 1px solid #fff;
   outline-offset: 1px;
 }
 
+.search-form__label:has(.search-form__checkbox:focus-visible),
 .content__list-item:has(.content__card-link:focus-visible) {
   outline: 1px solid #fff;
 }
